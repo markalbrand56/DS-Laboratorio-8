@@ -4,16 +4,14 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-modelo_final = load_model('./models/modelo_final.keras')  # Modelo de red neuronal entrenado
-normalizador_x = joblib.load('./models/scaler_x.pkl')  # Normalizador de datos de entrada
-normalizador_y = joblib.load('./models/scaler_y.pkl')  # Normalizador de datos de salida
-
-label_encoder_animal = joblib.load('./models/le_animal.pkl')  # Label encoder para la variable animal
-label_encoder_city = joblib.load('./models/le_city.pkl')  # Label encoder para la variable city
-label_encoder_furniture = joblib.load('./models/le_furniture.pkl')  # Label encoder para la variable furniture
-
 class PrediccionRequest():
-    model = modelo_final
+    model = load_model('./models/modelo_final.keras')  # Modelo de red neuronal entrenado
+    normalizador_x = joblib.load('./models/scaler_x.pkl')  # Normalizador de datos de entrada
+    normalizador_y = joblib.load('./models/scaler_y.pkl')  # Normalizador de datos de salida
+
+    label_encoder_animal = joblib.load('./models/le_animal.pkl')  # Label encoder para la variable animal
+    label_encoder_city = joblib.load('./models/le_city.pkl')  # Label encoder para la variable city
+    label_encoder_furniture = joblib.load('./models/le_furniture.pkl')  # Label encoder para la variable furniture
 
     def __init__(self, city: str, area: int, rooms: int, bathroom: int, parking_spaces: int, floor: int, animal: str, furniture: str, hoa: int, rent_amount: int, property_tax: int, fire_insurance: int):
         self.city = city
@@ -50,12 +48,14 @@ class PrediccionRequest():
     
     def predict(self):
         df = self.to_df()
-        df['animal'] = label_encoder_animal.transform(df['animal'])
-        df['city'] = label_encoder_city.transform(df['city'])
-        df['furniture'] = label_encoder_furniture.transform(df['furniture'])
-        df = normalizador_x.transform(df)
+        df['animal'] = self.label_encoder_animal.transform(df['animal'])
+        df['city'] = self.label_encoder_city.transform(df['city'])
+        df['furniture'] = self.label_encoder_furniture.transform(df['furniture'])
+        df = self.normalizador_x.transform(df)
+        
         prediction = self.model.predict(df)
-        respuesta = normalizador_y.inverse_transform(prediction)
+        respuesta = self.normalizador_y.inverse_transform(prediction)
+        
         return respuesta[0][0]
 
 # Crear una instancia de la clase PrediccionRequest
