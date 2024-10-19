@@ -48,11 +48,16 @@ class PrediccionRequest():
     
     def predict(self):
         df = self.to_df()
+
+        # Transformar las variables categóricas
         df['animal'] = self.label_encoder_animal.transform(df['animal'])
         df['city'] = self.label_encoder_city.transform(df['city'])
         df['furniture'] = self.label_encoder_furniture.transform(df['furniture'])
+
+        # Normalizar los datos
         df = self.normalizador_x.transform(df)
         
+        # Realizar la predicción y desnormalizar el resultado
         prediction = self.model.predict(df)
         respuesta = self.normalizador_y.inverse_transform(prediction)
         
