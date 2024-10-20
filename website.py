@@ -133,17 +133,17 @@ class PrediccionRequest():
             if not df.empty and all(col in df.columns for col in ['area', 'rooms', 'bathroom', 'parking spaces', 'floor', 'hoa (R$)', 'rent amount (R$)', 'property tax (R$)', 'fire insurance (R$)']):
                 st.write("Complete los siguientes campos para predecir el precio de alquiler de una propiedad.")
                 with st.form("property_form"):
-                    area = st.number_input("Área en m²", min_value=float(df['area'].min()), max_value=float(df['area'].max()))
-                    habitaciones = st.number_input("Número de habitaciones", min_value=float(df['rooms'].min()), max_value=float(df['rooms'].max()))
+                    area = st.number_input("Área en m²", min_value=float(df['area'].min()), max_value=float(df['area'].max()), step=1.0)
+                    habitaciones = st.number_input("Número de habitaciones", min_value=float(df['rooms'].min()), max_value=float(df['rooms'].max()), step=1.0)
                     banos = st.slider("Número de baños", min_value=float(df['bathroom'].min()), max_value=float(df['bathroom'].max()), step=1.0)
                     parking_spaces = st.slider("Número de espacios de estacionamiento", min_value=float(df['parking spaces'].min()), max_value=float(df['parking spaces'].max()), step=1.0)
                     piso = st.slider("Número de piso", min_value=int(df['floor'].min()), max_value=int(df['floor'].max()), step=1)
                     animal = st.selectbox("¿Se permiten mascotas?", ("acept", "not acept"))
                     muebles = st.selectbox("Mobiliario", ("furnished", "not furnished"))
-                    hoa = st.number_input("Cuota de HOA (R$)", min_value=float(df['hoa (R$)'].min()), max_value=float(df['hoa (R$)'].max()))
-                    renta = st.number_input("Monto de renta (R$)", min_value=float(df['rent amount (R$)'].min()), max_value=float(df['rent amount (R$)'].max()))
-                    impuesto_propiedad = st.number_input("Impuesto a la propiedad (R$)", min_value=float(df['property tax (R$)'].min()), max_value=float(df['property tax (R$)'].max()))
-                    seguro_incendio = st.number_input("Seguro contra incendios (R$)", min_value=float(df['fire insurance (R$)'].min()), max_value=float(df['fire insurance (R$)'].max()))
+                    hoa = st.number_input("Cuota de HOA (R$)", min_value=float(df['hoa (R$)'].min()), max_value=float(df['hoa (R$)'].max()), step=1.0)
+                    renta = st.number_input("Monto de renta (R$)", min_value=float(df['rent amount (R$)'].min()), max_value=float(df['rent amount (R$)'].max()), step=1.0)
+                    impuesto_propiedad = st.number_input("Impuesto a la propiedad (R$)", min_value=float(df['property tax (R$)'].min()), max_value=float(df['property tax (R$)'].max()), step=1.0)
+                    seguro_incendio = st.number_input("Seguro contra incendios (R$)", min_value=float(df['fire insurance (R$)'].min()), max_value=float(df['fire insurance (R$)'].max()), step=1.0)
                     ciudad = st.selectbox("Ciudad", df['city'].unique(), key='ciudad')                
                     submit_button = st.form_submit_button("Predecir Precio de Alquiler")
 
